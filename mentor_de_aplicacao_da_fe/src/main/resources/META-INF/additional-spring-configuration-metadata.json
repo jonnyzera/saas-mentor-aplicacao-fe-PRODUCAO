@@ -1,0 +1,54 @@
+{
+  "properties": [
+    {
+      "name": "gemini.api.key",
+      "type": "java.lang.String",
+      "description": "Chave de API do Google Gemini para acesso ao Mentor de Aplicação da Fé."
+    },
+    {
+      "name": "mercadopago.access.token",
+      "type": "java.lang.String",
+      "description": "Access Token do Mercado Pago (Chave Secreta) para autenticar chamadas de API."
+    },
+    {
+      "name": "app.base.url",
+      "type": "java.lang.String",
+      "description": "URL base da aplicação (usada nas URLs de retorno do Mercado Pago)."
+    },
+    {
+      "name": "mercadopago.external.reference",
+      "type": "java.lang.String",
+      "description": "Prefixo usado para construir o External Reference do pedido no Mercado Pago. CRÍTICO: Deve ser único."
+    },
+    {
+      "name": "GEMINI_API_KEY_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para a Chave de API de DEV do Gemini."
+    },
+    {
+      "name": "MP_ACCESS_TOKEN_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para o Token de Acesso de DEV do Mercado Pago."
+    },
+    {
+      "name": "DB_USER_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para o usuário do Banco de Dados de DEV."
+    },
+    {
+      "name": "DB_PASS_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para a senha do Banco de Dados de DEV."
+    },
+    {
+      "name": "MAIL_USER_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para o usuário de e-mail de DEV."
+    },
+    {
+      "name": "MAIL_PASS_DEV",
+      "type": "java.lang.String",
+      "description": "Variável de ambiente/propriedade local para a senha de e-mail de DEV."
+    }
+  ]
+}

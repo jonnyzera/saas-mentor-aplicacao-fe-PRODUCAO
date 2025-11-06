@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semente - Registrar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      /* Paleta: Lilás Suave, Dourado Claro, Fundo Calmo */
+      :root {
+        --cor-principal: #5e548e; /* Deep Lilac/Indigo */
+        --cor-acento: #ffc107; /* Gold/Amber */
+        --cor-fundo: #f7f9fc; /* Soft Blue/Gray */
+        --cor-secundaria: #e1bee7; /* Light Lilac */
+        --cor-texto: #333333;
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      h1,
+      h2,
+      h3,
+      .section-title {
+        font-family: "Lora", serif;
+        color: var(--cor-principal);
+        font-weight: 700;
+      }
+
+      .container {
+        max-width: 450px;
+        margin-top: -50px;
+      }
+
+      /* Estilo do Card (igual aos outros templates) */
+      .card-mentor {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        background-color: white;
+        padding: 2rem;
+      }
+
+      .logo-placeholder {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--cor-principal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+      }
+
+      .logo-placeholder i {
+        color: var(--cor-acento);
+        margin-right: 0.75rem;
+        font-size: 1.8rem;
+      }
+
+      /* Botão de Registro */
+      .btn-register {
+        background-color: var(--cor-acento);
+        border: none;
+        color: var(--cor-principal);
+        font-weight: 700;
+        padding: 0.75rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease-out;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-register:hover {
+        background-color: #fdd835;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        color: var(--cor-principal);
+      }
+
+      .link-secondary-action {
+        color: var(--cor-principal);
+        font-weight: 600;
+        transition: color 0.2s;
+        text-decoration: none;
+      }
+
+      .link-secondary-action:hover {
+        color: var(--cor-acento);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="logo-placeholder">
+        <i class="fa-solid fa-seedling"></i> SEMENTE
+      </div>
+
+      <div class="card card-mentor">
+        <h2 class="h4 fw-bold text-center mb-4">Crie Sua Conta Grátis</h2>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          <span th:text="${errorMessage}"></span>
+        </div>
+
+        <form th:action="@{/register}" method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label fw-semibold">Seu Nome</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Seu nome completo "
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="seu.email@exemplo.com"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label fw-semibold">Senha</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Crie uma senha forte"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="confirmPassword" class="form-label fw-semibold"
+              >Confirmar Senha</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Repita sua senha"
+              required
+            />
+          </div>
+
+          <div class="d-grid gap-2 mb-4">
+            <button type="submit" class="btn btn-primary btn-register">
+              <i class="fas fa-user-plus me-2"></i> Registrar e Começar
+            </button>
+          </div>
+        </form>
+
+        <p class="text-center small text-muted mb-0">
+          Já tem uma conta?
+          <a th:href="@{/login}" class="link-secondary-action"
+            >Faça Login aqui</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semente - Meu Plano</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --cor-principal: #5e548e;
+        --cor-acento: #ffc107;
+        --cor-fundo: #f7f9fc;
+        --cor-secundaria: #e1bee7;
+        --cor-reflexao: #f0f8ff; /* Alice Blue - Suave para destaque */
+      }
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+      .card-plan {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        background-color: white;
+      }
+      .header-app {
+        background-color: var(--cor-principal);
+        color: white;
+        padding: 2.5rem 1rem;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      }
+      .logo-placeholder {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      h2,
+      .section-title {
+        font-family: "Lora", serif;
+        color: var(--cor-principal);
+        font-weight: 700;
+      }
+      .btn-upgrade {
+        background-color: var(--cor-acento);
+        color: var(--cor-principal);
+        font-weight: 700;
+        border-radius: 50px;
+        transition: all 0.3s;
+      }
+      .btn-upgrade:hover {
+        background-color: #fdd835;
+        transform: translateY(-2px);
+        color: var(--cor-principal);
+      }
+      .progress-bar-custom {
+        background-color: var(--cor-principal);
+      }
+      .plan-badge {
+        background-color: var(--cor-principal);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 700;
+      }
+      .btn-action-back {
+        background-color: #4a4072;
+        color: white;
+        border-radius: 50px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        border: none;
+      }
+      .btn-action-back:hover {
+        background-color: #5e548e;
+        transform: translateY(-2px);
+      }
+
+      /* NOVO ESTILO: Card de comparação de plano */
+      .card-plan-compare {
+        border: 2px solid var(--cor-secundaria);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        transition: all 0.2s;
+        height: 100%;
+        background-color: white;
+      }
+      .card-plan-compare.current-plan {
+        border-color: var(--cor-principal);
+        box-shadow: 0 0 15px rgba(94, 84, 142, 0.2);
+        background-color: var(--cor-reflexao);
+      }
+      .limit-display {
+        font-family: "Lora", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--cor-principal);
+      }
+      .limit-badge {
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header-app text-center">
+      <div class="logo-placeholder mb-2">
+        <i class="fa-solid fa-seedling"></i> SEMENTE
+      </div>
+      <h1 class="h3 fw-bold mb-0">Gerenciar Minha Assinatura</h1>
+      <p class="mb-0 fs-6 text-light opacity-75">
+        Seu status de uso e opções de plano.
+      </p>
+    </div>
+
+    <div class="container pb-5" style="max-width: 800px">
+      <div class="text-center mb-4 mt-3">
+        <a th:href="@{/}" class="btn-action-back">
+          <i class="fa-solid fa-book-open me-2"></i> Voltar para o Diário
+        </a>
+      </div>
+      <div
+        th:if="${successMessage}"
+        class="alert alert-success alert-dismissible fade show card-plan"
+        role="alert"
+      >
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${successMessage}"></span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div
+        th:if="${errorMessage}"
+        class="alert alert-danger alert-dismissible fade show card-plan"
+        role="alert"
+      >
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="card card-plan p-4 mb-4">
+        <h2 class="h5 section-title mb-4">
+          <i class="fas fa-tag me-2"></i> Plano Atual
+        </h2>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h4 mb-0 fw-bold" style="color: var(--cor-principal)">
+            <span th:text="${planName}">PLANO</span>
+            <span class="badge bg-success" th:if="${planName != 'JARDINEIRO'}"
+              >Ativo</span
+            >
+          </h3>
+        </div>
+
+        <div th:if="${limit < 1000}" class="mb-4">
+          <p class="fw-semibold text-muted mb-2">
+            Uso Mensal:
+            <span th:text="${usagePercentage} + '%'">0%</span>
+            (<span th:text="${currentCount}">0</span> de
+            <span th:text="${limit}">0</span>)
+          </p>
+
+          <div class="progress" style="height: 15px">
+            <div
+              class="progress-bar progress-bar-custom"
+              role="progressbar"
+              th:style="'width: ' + ${usagePercentage} + '%'"
+              th:aria-valuenow="${currentCount}"
+              th:aria-valuemin="0"
+              th:aria-valuemax="${limit}"
+            ></div>
+          </div>
+
+          <p th:if="${currentCount >= limit}" class="text-danger small mt-2">
+            🚨 Limite atingido! Faça upgrade para continuar.
+          </p>
+          <p th:unless="${currentCount >= limit}" class="text-muted small mt-2">
+            Seu contador será resetado no próximo mês.
+          </p>
+
+          <div class="text-center mt-3">
+            <a
+              th:href="@{/dashboard}"
+              class="btn btn-sm btn-outline-secondary rounded-pill fw-semibold"
+            >
+              <i class="fas fa-chart-line me-2"></i> Ver Mapa de Progresso
+              Detalhado
+            </a>
+          </div>
+        </div>
+
+        <div th:if="${limit >= 1000}" class="alert alert-info text-center">
+          <i class="fas fa-infinity me-2"></i> Seu plano atual é **Ilimitado**.
+          Continue crescendo sem preocupações!
+
+          <div class="text-center mt-3">
+            <a
+              th:href="@{/dashboard}"
+              class="btn btn-sm btn-outline-secondary rounded-pill fw-semibold"
+            >
+              <i class="fas fa-chart-line me-2"></i> Ver Meu Mapa de Progresso
+            </a>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <h2 class="h5 section-title mb-4">
+          <i class="fas fa-arrow-up me-2"></i> Fazer Upgrade
+        </h2>
+
+        <div class="row g-4 mb-4">
+          <div th:each="plan : ${subscriptionPlans}" class="col-md-4">
+            <div
+              th:classappend="${plan.name() == planName} ? 'current-plan'"
+              class="card-plan-compare text-center"
+            >
+              <h5 class="fw-bold mb-3" th:text="${plan.name()}">PLANO</h5>
+
+              <div
+                th:if="${plan.getMonthlyLimit() < 1000}"
+                class="limit-display"
+              >
+                <span th:text="${plan.getMonthlyLimit()}"></span>
+                <span class="limit-badge text-muted d-block fw-normal"
+                  >Mentorias/Mês</span
+                >
+              </div>
+              <div
+                th:if="${plan.getMonthlyLimit() >= 1000}"
+                class="limit-display"
+              >
+                <i class="fas fa-infinity text-primary"></i>
+                <span class="limit-badge text-muted d-block fw-normal"
+                  >Ilimitado</span
+                >
+              </div>
+              <p class="mt-3 mb-0 small" th:if="${plan.name() == planName}">
+                <span class="badge bg-success"
+                  ><i class="fas fa-check me-1"></i> Seu Plano Atual</span
+                >
+              </p>
+
+              <form
+                th:if="${plan.name() != planName AND plan.getMonthlyLimit() > limit}"
+                th:action="@{/upgrade-plan}"
+                method="post"
+                class="mt-3 d-grid"
+              >
+                <input
+                  type="hidden"
+                  name="planName"
+                  th:value="${plan.name()}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-upgrade"
+                  style="font-size: 0.9rem"
+                >
+                  Fazer Upgrade
+                </button>
+              </form>
+
+              <p
+                class="mt-3 mb-0 small"
+                th:if="${plan.getMonthlyLimit() < limit}"
+              >
+                <span class="badge bg-light text-muted"
+                  >Downgrade não disponível</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semente - Meu Mapa de Crescimento</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <style>
+      /* Paleta: Lilás Suave, Dourado Claro, Fundo Calmo */
+      :root {
+        --cor-principal: #5e548e;
+        /* Deep Lilac/Indigo */
+        --cor-acento: #ffc107;
+        /* Gold/Amber */
+        --cor-fundo: #f7f9fc;
+        /* Soft Blue/Gray */
+        --cor-secundaria: #e1bee7;
+        /* Light Lilac */
+        --cor-texto: #333333;
+        --cor-grafico-bar: #8d79ad;
+        /* Lilás para as barras */
+        --cor-reflexao: #f0f8ff;
+        /* Alice Blue - Suave para destaque */
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .section-title {
+        font-family: "Lora", serif;
+        color: var(--cor-principal);
+        font-weight: 700;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      /* 1. Header e Logo 'SEMENTE' */
+      .header-app {
+        background-color: var(--cor-principal);
+        color: white;
+        padding: 2.5rem 1rem;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .logo-placeholder {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-placeholder i {
+        color: var(--cor-acento);
+        /* Ícone dourado */
+        margin-right: 0.5rem;
+        font-size: 1.8rem;
+      }
+
+      /* 2. Dashboard Cards */
+      .card-mentor {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        background-color: white;
+      }
+
+      .chart-container {
+        position: relative;
+        /* Altura responsiva, ajustada para o radial chart */
+        min-height: 350px;
+        width: 100%;
+      }
+
+      /* Calendário Customizado (Refinado) */
+      .calendar-section {
+        background-color: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        text-align: center;
+      }
+
+      .calendar-day {
+        padding: 0.7rem 0;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        transition: background-color 0.3s, transform 0.1s;
+        cursor: pointer;
+        font-family: "Open Sans", sans-serif;
+        /* Consistência na fonte */
+      }
+
+      .calendar-day:hover {
+        background-color: var(--cor-secundaria);
+        transform: scale(1.05);
+      }
+
+      .calendar-header {
+        background-color: var(--cor-secundaria);
+        color: var(--cor-principal);
+        font-weight: 700;
+        padding: 0.5rem 0;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .day-registered {
+        background-color: var(--cor-principal) !important;
+        color: white;
+        box-shadow: 0 3px 6px rgba(94, 84, 142, 0.5);
+      }
+
+      .day-registered:hover {
+        background-color: #4a4072 !important;
+        /* Um lilás mais escuro no hover */
+      }
+
+      /* Resumo Insights */
+      .card-insight {
+        background-color: var(--cor-reflexao);
+        border-left: 5px solid var(--cor-acento);
+      }
+
+      /* Botão Voltar/Visualizar */
+      .btn-action {
+        background-color: var(--cor-principal);
+        color: white;
+        border-radius: 50px;
+        padding: 0.5rem 1.25rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        border: none;
+      }
+
+      .btn-action:hover {
+        background-color: #4a4072;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      /* 4. Footer */
+      .app-footer {
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+        color: #777;
+        padding: 2rem 0 1rem;
+      }
+
+      .footer-link {
+        color: var(--cor-principal);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+
+      .footer-link:hover {
+        color: var(--cor-acento);
+      }
+
+      /* --------------------------------------------- */
+      /* MOBILE RESPONSIVENESS (UX DESIGN) */
+      /* --------------------------------------------- */
+      @media (max-width: 768px) {
+        .container {
+          max-width: 100%;
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .header-app {
+          padding: 1.5rem 1rem;
+          border-radius: 0 0 1rem 1rem;
+        }
+
+        .logo-placeholder {
+          font-size: 1.8rem;
+        }
+
+        /* Ajuste do padding do calendário */
+        .calendar-section {
+          padding: 1rem;
+          border-radius: 1rem;
+        }
+
+        .calendar-day {
+          padding: 0.5rem 0; /* Reduz o padding do dia */
+          font-size: 0.8rem; /* Reduz o tamanho da fonte */
+        }
+
+        .calendar-header {
+          font-size: 0.7rem; /* Reduz o tamanho da fonte do cabeçalho */
+        }
+
+        /* Ajuste para o texto do Insight Reflexivo */
+        .card-insight p {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header-app text-center">
+      <div class="logo-placeholder mb-2">
+        <i class="fa-solid fa-seedling"></i> SEMENTE
+      </div>
+      <h1 class="h3 fw-bold mb-0">Meu Mapa de Crescimento</h1>
+      <p class="mb-0 fs-6 text-light opacity-75">
+        Acompanhe sua jornada de aplicação da Palavra.
+      </p>
+    </div>
+
+    <div class="container pb-5">
+      <div class="text-center mb-4 mt-3 d-flex justify-content-center gap-3">
+        <a th:href="@{/}" class="btn-action">
+          <i class="fa-solid fa-arrow-left me-2"></i> Voltar para o Diário
+        </a>
+        <form th:action="@{/logout}" method="post">
+          <button
+            type="submit"
+            class="btn btn-sm btn-outline-danger"
+            style="
+              border-radius: 50px;
+              padding: 0.5rem 1rem;
+              font-weight: 600;
+              border-color: #dc3545;
+              color: #dc3545;
+            "
+          >
+            <i class="fas fa-sign-out-alt me-2"></i> Sair
+          </button>
+        </form>
+      </div>
+
+      <h2 class="h5 fw-bold text-center mb-3 mt-4">
+        <i class="fa-solid fa-star me-2"></i> Insight de Evolução
+      </h2>
+      <div class="card card-mentor card-insight p-4">
+        <p class="fw-bold mb-2 text-dark">
+          <i class="fa-solid fa-quote-left text-muted me-2"></i> Onde está seu
+          coração?
+        </p>
+        <p class="card-text">
+          <span th:if="${latestInsight}" th:utext="${latestInsight}"></span>
+          <span
+            th:unless="${latestInsight}"
+            class="text-muted fst-italic small"
+          >
+            — Comece a registrar seus desafios no Diário para receber insights
+            reflexivos sobre sua jornada.
+          </span>
+        </p>
+      </div>
+
+      <h2 class="h5 fw-bold text-center mb-3 mt-4">
+        <i class="fa-solid fa-chart-pie me-2"></i> Composição dos Desafios (IA)
+      </h2>
+      <div class="card card-mentor p-4">
+        <th:block th:if="${not #maps.isEmpty(themeFrequency)}">
+          <p class="text-center text-muted small mb-3">
+            Como seu foco emocional e espiritual se divide neste período?
+          </p>
+          <div class="chart-container">
+            <div id="themeChart"></div>
+          </div>
+          <p
+            id="chartInsight"
+            class="text-center text-muted small mt-4 mb-0 fw-semibold"
+          ></p>
+        </th:block>
+
+        <th:block th:unless="${not #maps.isEmpty(themeFrequency)}">
+          <div class="text-center p-4 text-muted">
+            <i
+              class="fas fa-chart-pie fa-2x mb-3 text-secondary opacity-25"
+            ></i>
+            <p class="mb-0 fw-semibold">Gráfico de Composição Vazio</p>
+            <p class="small">
+              Você ainda não possui registros. Use o Diário para ver seus temas
+              mais frequentes aqui.
+            </p>
+          </div>
+        </th:block>
+      </div>
+
+      <h2 class="h5 fw-bold text-center mb-3 mt-4">
+        <i class="fa-solid fa-calendar-check me-2"></i> Calendário de Hábito
+        Diário
+      </h2>
+      <div class="calendar-section">
+        <p class="text-center text-muted small mb-4">
+          Clique nos dias em **Lilás Escuro** para gerenciar os registros.
+        </p>
+
+        <div class="calendar-grid">
+          <div class="calendar-header">DOM</div>
+          <div class="calendar-header">SEG</div>
+          <div class="calendar-header">TER</div>
+          <div class="calendar-header">QUA</div>
+          <div class="calendar-header">QUI</div>
+          <div class="calendar-header">SEX</div>
+          <div class="calendar-header">SÁB</div>
+
+          <th:block th:each="day : ${#numbers.sequence(1, 30)}">
+            <div
+              th:with="isRegistered=${#lists.contains(registrationDates, day)}"
+            >
+              <div
+                th:classappend="${isRegistered} ? 'day-registered'"
+                th:data-day="${day}"
+                th:data-bs-toggle="${isRegistered} ? 'modal'"
+                th:data-bs-target="${isRegistered} ? '#dailyDetailModal'"
+                th:onclick="${isRegistered} ? 'showDailyRecords(' + ${day} + ')'"
+                class="calendar-day"
+                th:text="${day}"
+              ></div>
+            </div>
+          </th:block>
+        </div>
+
+        <div class="text-center mt-4">
+          <a th:href="@{/all-records}" class="btn-action">
+            <i class="fa-solid fa-folder-open me-2"></i> Ver Todos os Registros
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer text-center">
+      <div class="container">
+        <p class="mb-3 small">
+          ©
+          <span th:text="${#dates.year(#dates.createNow())}">2024</span> Semente
+          - Mentor de Aplicação da Fé.
+        </p>
+        <div class="mb-3">
+          <a href="#" class="footer-link mx-2 small">Sobre</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Contato</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Política de Privacidade</a>
+        </div>
+      </div>
+    </footer>
+
+    <div
+      class="modal fade"
+      id="dailyDetailModal"
+      tabindex="-1"
+      aria-labelledby="dailyDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div
+            class="modal-header"
+            style="background-color: var(--cor-principal); color: white"
+          >
+            <h5 class="modal-title" id="dailyDetailModalLabel">
+              Registros do Dia <span id="modalDayNumber"></span>
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted small">
+              Aqui estão todas as "sementes" que você plantou neste dia.
+            </p>
+            <div id="dailyRecordsList" class="list-group"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteConfirmationModal"
+      tabindex="-1"
+      aria-labelledby="deleteConfirmationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="deleteConfirmationModalLabel">
+              <i class="fas fa-exclamation-triangle me-2"></i> Confirmação
+              Necessária
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="mb-3">
+              Você tem certeza que deseja excluir este registro?
+            </p>
+            <p class="text-danger small">
+              Esta ação não pode ser desfeita e irá afetar seu Mapa de
+              Crescimento.
+            </p>
+
+            <form id="deleteForm" method="post" action="/delete/0">
+              <input type="hidden" name="_method" value="delete" />
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger fw-bold">
+                  Sim, Excluir Definitivamente
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      // Dados injetados pelo Spring Controller (mapa de frequência)
+      const themeData = /*[[${themeFrequency}]]*/ {};
+      // Dados injetados (NÃO MAIS COM FALLBACK MOCADO)
+      const latestThemes = /*[[${lastThreeUniqueThemes}]]*/ [];
+      // Dados injetados (NÃO MAIS COM FALLBACK MOCADO)
+      const recordsByDay = /*[[${recordsByDay}]]*/ {};
+
+      // A linha 'rawData' agora pega diretamente os dados do controller.
+      // Se 'themeData' estiver vazio, 'rawData' estará vazio.
+      const rawData = themeData;
+
+      // --- Lógica do Gráfico Radial (UX Melhorado: Top 5 + Outros) ---
+      const TOP_N = 5;
+
+      // 1. Converter Map para Array de objetos { theme: string, count: number }
+      const dataArray = Object.entries(rawData).map(([theme, count]) => ({
+        theme,
+        count,
+      }));
+
+      // Esta checagem garante que o código do gráfico só execute se
+      // 'dataArray' (vindo do 'themeData' real) tiver conteúdo.
+      if (dataArray.length > 0) {
+        // 2. Classificar em ordem decrescente de contagem (Ordenação)
+        dataArray.sort((a, b) => b.count - a.count);
+
+        // 3. Obter os Top N e o restante
+        const topThemes = dataArray.slice(0, TOP_N);
+        const otherThemes = dataArray.slice(TOP_N);
+
+        let finalLabels = topThemes.map((item) => item.theme);
+        let finalCounts = topThemes.map((item) => item.count);
+        let totalRecords = finalCounts.reduce((sum, val) => sum + val, 0);
+
+        // 4. Agrupar o restante em "Outros"
+        if (otherThemes.length > 0) {
+          const otherCount = otherThemes.reduce(
+            (sum, item) => sum + item.count,
+            0
+          );
+          finalLabels.push("Outros");
+          finalCounts.push(otherCount);
+          totalRecords += otherCount;
+        }
+
+        const labels = finalLabels;
+        const dataValues = finalCounts;
+
+        // Recalcular percentuais e configurar o gráfico com o novo set de dados
+        const percentageValues = finalCounts.map((val) =>
+          Math.round((val / totalRecords) * 100)
+        );
+
+        const chartColors = [
+          "#5e548e",
+          "#8d79ad",
+          "#e1bee7",
+          "#ffc107",
+          "#a4c2f4",
+          "#cccccc",
+        ]; // Adicionado cinza para 'Outros'
+
+        const options = {
+          series: percentageValues.length > 0 ? percentageValues : [100],
+          chart: {
+            height: 350,
+            type: "radialBar",
+            animations: {
+              enabled: true,
+              easing: "easeinout",
+              speed: 800,
+            },
+          },
+          plotOptions: {
+            radialBar: {
+              hollow: {
+                size: "30%",
+              },
+              dataLabels: {
+                show: true,
+                name: {
+                  show: true,
+                  fontFamily: "Open Sans, sans-serif",
+                  fontSize: "16px",
+                  color: "#777",
+                  formatter: function (w) {
+                    return "Foco Principal";
+                  },
+                },
+                value: {
+                  show: true,
+                  fontFamily: "Lora, serif",
+                  fontWeight: 700,
+                  fontSize: "30px",
+                  color: "#333",
+                  formatter: function (val) {
+                    return val + "%";
+                  },
+                },
+                total: {
+                  show: true,
+                  label: "Total",
+                  fontFamily: "Open Sans, sans-serif",
+                  formatter: function (w) {
+                    // Usa a variável totalRecords calculada
+                    return totalRecords + " Registros";
+                  },
+                },
+              },
+            },
+          },
+          labels: labels.length > 0 ? labels : ["Sem Dados"],
+          colors: chartColors.slice(0, labels.length),
+          legend: {
+            show: true,
+            position: "bottom",
+            fontFamily: "Open Sans, sans-serif",
+          },
+          tooltip: {
+            y: {
+              formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+                const rawCount = dataValues[seriesIndex];
+                return rawCount + " Registros (" + val + "%)";
+              },
+            },
+          },
+        };
+
+        const chart = new ApexCharts(
+          document.querySelector("#themeChart"),
+          options
+        );
+        chart.render();
+      }
+
+      // --- Lógica de Mensagem de Foco (Recência: Últimas 3 Aplicações) ---
+      if (latestThemes.length > 0) {
+        let message;
+        let themesList;
+
+        // ****** INÍCIO DA CORREÇÃO (Lógica dinâmica de texto e HTML) ******
+
+        if (latestThemes.length === 1) {
+          // Caso 1: Apenas 1 tema
+          themesList = latestThemes[0];
+          // Usando <strong> para negrito (HTML) em vez de ** (Markdown)
+          message = `Sua <strong>Área de Aplicação</strong> mais recente foi: ${themesList}.`;
+        } else {
+          // Caso 2: 2 ou 3 temas
+          const themesCopy = [...latestThemes];
+          const lastTheme = themesCopy.pop();
+
+          if (themesCopy.length > 0) {
+            themesList = themesCopy.join(", ") + " e " + lastTheme;
+          } else {
+            themesList = lastTheme;
+          }
+
+          // Texto dinâmico (plural/singular)
+          const pluralDesafios =
+            latestThemes.length > 1 ? "desafios" : "desafio";
+          const pluralForam = latestThemes.length > 1 ? "foram" : "foi";
+
+          // Usando <strong> e o .length correto
+          message = `As <strong>Áreas de Aplicação</strong> dos seus últimos ${latestThemes.length} ${pluralDesafios} ${pluralForam}: ${themesList}.`;
+        }
+
+        // ****** FIM DA CORREÇÃO ******
+
+        document.getElementById("chartInsight").innerHTML = message;
+      } else {
+        const chartInsightEl = document.getElementById("chartInsight");
+        if (chartInsightEl) {
+          chartInsightEl.innerHTML =
+            "Ainda não há aplicações suficientes para análise de temas recentes.";
+        }
+      }
+
+      // --- Lógica de Exclusão Interativa (Dois Alertas) ---
+
+      /**
+       * Abre o Modal de Detalhes Diários (Primeiro Alerta).
+       * @param {number} day - O dia do mês clicado.
+       */
+      function showDailyRecords(day) {
+        // O Controller deve injetar o objeto recordsByDay com os dados reais
+        const records = recordsByDay[day];
+        const listContainer = document.getElementById("dailyRecordsList");
+        const dayNumberTitle = document.getElementById("modalDayNumber");
+        listContainer.innerHTML = "";
+
+        dayNumberTitle.textContent = day;
+
+        if (records && records.length > 0) {
+          records.forEach((record) => {
+            const themes = record.identifiedTheme
+              ? record.identifiedTheme
+                  .split(",")
+                  .map(
+                    (t) =>
+                      `<span class="badge bg-primary-subtle text-primary-emphasis rounded-pill me-1">${t.trim()}</span>`
+                  )
+                  .join("")
+              : "";
+
+            const item = document.createElement("div");
+            item.className =
+              "list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2 rounded-3";
+            item.innerHTML = `
+                        <div>
+                            <p class="mb-1 fw-semibold text-break">${record.userChallenge}</p>
+                            <small class="text-muted">ID: ${record.id}</small>
+                            <div class="mt-1">${themes}</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger ms-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteConfirmationModal"
+                                data-app-id="${record.id}"
+                                data-bs-dismiss="modal"
+                                title="Excluir este registro">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>`;
+            listContainer.appendChild(item);
+          });
+        } else {
+          listContainer.innerHTML =
+            '<p class="text-center text-muted">Nenhum registro encontrado para este dia.</p>';
+        }
+      }
+
+      // Lógica para injetar o ID do registro no Modal de Confirmação (Segundo Alerta)
+      document.addEventListener("DOMContentLoaded", function () {
+        const deleteConfirmationModal = document.getElementById(
+          "deleteConfirmationModal"
+        );
+        const deleteForm = document.getElementById("deleteForm");
+
+        deleteConfirmationModal.addEventListener(
+          "show.bs.modal",
+          function (event) {
+            // Pega o botão de Lixeira que acionou o modal
+            const button = event.relatedTarget;
+
+            // Pega o ID do registro
+            const appId = button.getAttribute("data-app-id");
+
+            // Atualiza a URL do formulário de exclusão
+            // A sintaxe th:inline injeta o prefixo do path Thymeleaf aqui.
+            deleteForm.action = /*[[@{/delete/}]]*/ "/delete/" + appId;
+          }
+        );
+      });
+
+      /*]]>*/
+    </script>
+  </body>
+</html>

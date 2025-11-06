@@ -1,0 +1,53 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# =================================================================
+# CONFIGURAÇÕES DE AMBIENTE E SEGREDOS (CRÍTICO)
+# Estes arquivos contêm chaves de teste e NUNCA devem ir para o Git.
+# =================================================================
+
+# Ignora o arquivo de secrets local (se você o criou como application-local.properties)
+/src/main/resources/application-local.properties
+
+# Ignora chaves de teste (se você optou por usar este nome)
+/src/main/resources/application-dev.properties
+
+# Ignora variáveis de ambiente (se você estiver usando um arquivo .env para o local)
+.env
+
+# Ignora o arquivo de chaves de teste que estava no seu template inicial
+application-dev.properties 
+
+# Ignora a configuração de secrets se ela estiver na raiz
+.secrets

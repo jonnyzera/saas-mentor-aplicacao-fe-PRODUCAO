@@ -1,0 +1,736 @@
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SaaS Mentor de Aplicação da Fé</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      /* Paleta: Lilás Suave, Dourado Claro, Fundo Calmo */
+      :root {
+        --cor-principal: #5e548e;
+        /* Deep Lilac/Indigo (Lilás Principal) */
+        --cor-acento: #ffc107;
+        /* Gold/Amber (Dourado de Destaque) */
+        --cor-fundo: #f7f9fc;
+        /* Soft Blue/Gray (Fundo Branco Suave - Solicitado) */
+        --cor-secundaria: #e1bee7;
+        /* Light Lilac (Lilás Claro/Suave) */
+        --cor-texto: #333333;
+        /* Texto Escuro */
+        --cor-reflexao: #f0f8ff;
+        /* Alice Blue - Suave para destaque */
+        /* ****** INÍCIO DA CORREÇÃO (Nova Cor) ****** */
+        --cor-conselhos-bg: #fff8e1; /* Amarelo muito claro para conselhos */
+        /* ****** FIM DA CORREÇÃO ****** */
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        /* Fundo Branco Suave - Mantido */
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .section-title {
+        font-family: "Lora", serif;
+        /* Títulos em Lilás Principal */
+        color: var(--cor-principal);
+        font-weight: 700;
+      }
+
+      .container {
+        max-width: 800px;
+      }
+
+      /* 1. Header */
+      .header-app {
+        background-color: var(--cor-principal);
+        color: white;
+        padding: 2.5rem 1rem;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        /* ESSENCIAL para posicionar os botões TOP-RIGHT */
+      }
+
+      .logo-placeholder {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-placeholder i {
+        color: var(--cor-acento);
+        /* Ícone dourado */
+        margin-right: 0.5rem;
+        font-size: 1.8rem;
+      }
+
+      /* NOVO ESTILO: Container para os Botões TOP-RIGHT (flexbox para alinhamento) */
+      .top-buttons {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 0.5rem; /* Espaço entre os botões */
+        z-index: 10;
+      }
+
+      /* Estilo de base para todos os botões no topo (Progresso, Meu Plano) */
+      .btn-progress-top,
+      .btn-progress-top-logout {
+        background-color: var(--cor-acento);
+        color: var(--cor-principal);
+        /* Texto em lilás profundo */
+        border: none;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem; /* Aumentei um pouco o padding horizontal base */
+        border-radius: 1rem;
+        /* Cantos arredondados */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        font-size: 0.75rem;
+        /* Fonte menor */
+        text-decoration: none;
+        font-family: "Open Sans", sans-serif;
+        display: flex; /* Para alinhar ícone e texto */
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap; /* Impede que o texto quebre linha */
+      }
+      /* Ajuste do ícone base */
+      .btn-progress-top i,
+      .btn-progress-top-logout i {
+        margin-right: 0.35rem; /* Espaço entre ícone e texto */
+        font-size: 0.8rem; /* Tamanho do ícone */
+      }
+
+      .btn-progress-top:hover,
+      .btn-progress-top-logout:hover {
+        background-color: #fdd835;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        color: var(--cor-principal);
+      }
+
+      /* Estilo específico para o botão de SAIR no topo (em contraste) */
+      .btn-progress-top-logout {
+        background-color: #dc3545; /* Vermelho */
+        color: white;
+        border: 2px solid #dc3545;
+        box-shadow: none;
+      }
+      .btn-progress-top-logout:hover {
+        background-color: #c82333;
+        transform: scale(1.05);
+        color: white;
+      }
+      .btn-progress-top-logout i {
+        color: white; /* Garante que o ícone Sair seja branco */
+      }
+
+      /* FIM NOVO ESTILO TOP-RIGHT */
+
+      /* 2. Formulário e Cards */
+      .card-mentor {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        background-color: white;
+      }
+
+      /* ESTILO DOS ALERTS (FEEDBACKS) */
+      .alert-custom {
+        border-radius: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        font-weight: 600;
+        border: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .alert-custom .btn-close {
+        margin-left: auto;
+        filter: invert(1);
+        opacity: 0.8;
+      }
+
+      .alert-success-custom {
+        background-color: #d4edda;
+        color: #155724;
+        border-left: 6px solid #28a745;
+      }
+
+      .alert-danger-custom {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-left: 6px solid #dc3545;
+      }
+
+      .btn-generate {
+        background-color: var(--cor-acento);
+        border: none;
+        color: var(--cor-principal);
+        font-weight: 700;
+        padding: 0.75rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease-out;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-generate:hover {
+        background-color: #fdd835;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        color: var(--cor-principal);
+      }
+
+      .btn-generate:disabled {
+        background-color: var(--cor-acento);
+        color: var(--cor-principal);
+        opacity: 0.75; /* Fica levemente apagado */
+        cursor: not-allowed; /* Muda o cursor */
+      }
+
+      /* Botão Acompanhamento (REMOVIDO DO CORPO, MANTIDO ESTILO PARA REFERÊNCIA) */
+      .btn-dashboard {
+        /* Nível de prioridade alterado: Agora é um botão secundário */
+        background-color: white;
+        color: var(--cor-principal);
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border: 2px solid var(--cor-principal);
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .btn-dashboard:hover {
+        background-color: var(--cor-principal);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 3. Seção de Resultados (Hierarquia Visual) */
+      .section-title {
+        font-family: "Lora", serif;
+        color: var(--cor-principal);
+        font-weight: 700;
+        border-bottom: 2px solid var(--cor-secundaria);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+
+      .result-card {
+        border-left: 8px solid var(--cor-principal);
+        /* Borda lilás para destaque */
+        transition: transform 0.2s;
+      }
+
+      .result-card:hover {
+        transform: translateY(-3px);
+      }
+
+      /* Versículo Bússola */
+      .versiculo-bussola {
+        background-color: var(--cor-reflexao);
+        /* Alice Blue - Suave para destaque */
+        border-radius: 1rem;
+        font-style: italic;
+        font-weight: 600;
+        line-height: 1.6;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* ****** INÍCIO DA CORREÇÃO (Estilo Conselhos) ****** */
+      /* Estilo para a nova seção de Conselhos Práticos */
+      .conselhos-praticos {
+        background-color: var(--cor-conselhos-bg); /* Fundo amarelo claro */
+        border-left: 5px solid var(--cor-acento); /* Borda dourada */
+        border-radius: 0.5rem;
+        padding: 1rem 1.5rem;
+      }
+      .conselhos-praticos .section-title {
+        border-bottom: none; /* Remove a linha do título */
+        padding-bottom: 0;
+        margin-bottom: 0.75rem;
+      }
+      .conselhos-praticos ul {
+        padding-left: 1.2rem; /* Ajusta indentação da lista */
+        margin-bottom: 0;
+      }
+      .conselhos-praticos li {
+        margin-bottom: 0.5rem; /* Espaço entre itens */
+      }
+      /* ****** FIM DA CORREÇÃO ****** */
+
+      .badge-theme {
+        background-color: #e3f2fd;
+        /* Azul Suave */
+        color: var(--cor-principal);
+        font-size: 0.9rem;
+        padding: 0.6em 1em;
+        border-radius: 50px;
+        font-weight: 600;
+        display: inline-block;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      /* 4. Footer */
+      .app-footer {
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+        color: #777;
+        padding: 2rem 0 1rem;
+      }
+
+      .footer-link {
+        color: var(--cor-principal);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+
+      .footer-link:hover {
+        color: var(--cor-acento);
+      }
+
+      /* NOVO ESTILO: Cabeçalho do Modal de Confirmação */
+      .modal-header-confirmation {
+        background-color: var(--cor-principal);
+        color: white;
+        border-bottom: 1px solid var(--cor-principal);
+      }
+
+      /* --------------------------------------------- */
+      /* MOBILE RESPONSIVENESS (UX DESIGN) */
+      /* --------------------------------------------- */
+      @media (max-width: 768px) {
+        .container {
+          max-width: 100%;
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .header-app {
+          /* Aumenta o padding superior para forçar o logo a iniciar abaixo dos botões. */
+          padding: 4.5rem 1rem 1.5rem; /* Ajustado */
+          border-radius: 0 0 1.5rem 1.5rem; /* Ajustado */
+        }
+
+        .logo-placeholder {
+          font-size: 1.8rem;
+        }
+
+        /* Ajusta o layout dos botões superiores para serem empilhados ou responsivos */
+        .top-buttons {
+          top: 0.5rem; /* Puxa um pouco mais para cima */
+          right: 0.5rem;
+          gap: 0.3rem; /* Diminui o espaço entre botões */
+        }
+
+        .btn-progress-top,
+        .btn-progress-top-logout {
+          font-size: 0.6rem; /* Fonte ainda menor */
+          padding: 0.3rem 0.5rem; /* Padding vertical e horizontal reduzidos */
+          /* MANTEMOS flex-direction: row; (implícito) */
+        }
+        .btn-progress-top i,
+        .btn-progress-top-logout i {
+          font-size: 0.7rem; /* Ícone um pouco menor */
+          margin-right: 0.2rem; /* Espaço menor entre ícone e texto */
+        }
+
+        /* Reduz o padding dos cards e resultados */
+        .card-mentor,
+        .result-card .card-body {
+          padding: 1rem !important;
+          margin-bottom: 1.5rem;
+          border-radius: 1rem;
+        }
+
+        /* Reduz a margem da lista de aplicações (Histórico) */
+        .h4.fw-bold.text-center.mb-5 {
+          margin-bottom: 2.5rem !important;
+        }
+
+        /* Ajuste do badge theme para mobile */
+        .badge-theme {
+          padding: 0.4em 0.7em;
+          font-size: 0.75rem;
+        }
+
+        /* Ajuste do Versículo Bússola */
+        .versiculo-bussola {
+          padding: 1rem;
+          font-size: 0.95rem;
+        }
+
+        /* ****** INÍCIO DA CORREÇÃO (Padding Conselhos Mobile) ****** */
+        .conselhos-praticos {
+          padding: 1rem; /* Padding menor no mobile */
+        }
+        /* ****** FIM DA CORREÇÃO ****** */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header-app text-center">
+      <div class="top-buttons">
+        <a
+          th:href="@{/my-plan}"
+          class="btn-progress-top"
+          title="Gerenciar Plano"
+        >
+          <i class="fas fa-award"></i> Meu Plano
+        </a>
+        <a
+          th:href="@{/dashboard}"
+          class="btn-progress-top"
+          title="Ver Mapa de Crescimento"
+        >
+          <i class="fas fa-chart-line"></i> Progresso
+        </a>
+        <form th:action="@{/logout}" method="post" class="d-inline">
+          <button
+            type="submit"
+            class="btn-progress-top-logout"
+            title="Sair da Conta"
+          >
+            <i class="fas fa-sign-out-alt"></i> Sair
+          </button>
+        </form>
+      </div>
+
+      <div class="logo-placeholder mb-2">
+        <i class="fa-solid fa-seedling"></i> SEMENTE
+      </div>
+      <h1 class="h3 fw-bold mb-0">Mentor de Aplicação da Fé</h1>
+      <p class="mb-0 fs-6 text-light opacity-75">
+        Seu espaço de paz e ação. Conte com a Palavra para o seu dia.
+      </p>
+    </div>
+
+    <div class="container pb-5">
+      <div
+        th:if="${successMessage}"
+        class="alert alert-success-custom alert-custom fade show"
+        role="alert"
+      >
+        <i class="fas fa-check-circle me-3"></i>
+        <span th:text="${successMessage}"></span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div
+        th:if="${errorMessage}"
+        class="alert alert-danger-custom alert-custom fade show"
+        role="alert"
+      >
+        <i class="fas fa-exclamation-triangle me-3"></i>
+        <span th:text="${errorMessage}"></span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card card-mentor">
+        <div class="card-body">
+          <h3 class="h5 fw-bold text-center mb-4">
+            ✍️ Compartilhe Seu Desafio Hoje
+          </h3>
+
+          <form th:action="@{/generate}" method="post" id="mentorshipForm">
+            <div class="mb-4">
+              <label for="userChallenge" class="form-label fw-semibold"
+                >Qual emoção, problema ou desafio está pesando em seu
+                coração?</label
+              >
+              <textarea
+                class="form-control"
+                id="userChallenge"
+                name="userChallenge"
+                rows="5"
+                placeholder="Ex: Sinto-me sobrecarregado(a) pelas responsabilidades do trabalho e estou perdendo a paciência com a minha família..."
+                required
+              ></textarea>
+              <div class="form-text mt-2">
+                Sua honestidade aqui garante a melhor resposta do Mentor
+                Premium.
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary btn-generate"
+                id="generateButton"
+              >
+                ✨ Receber Mentoria e Plano de Ação (IA Premium)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <hr class="my-5 opacity-25" />
+
+      <h2 class="h4 fw-bold text-center mb-5">
+        Diário de Aplicações (Seu Histórico de Crescimento)
+      </h2>
+
+      <div
+        th:if="${#lists.isEmpty(applications)}"
+        class="text-center p-4 text-muted"
+      >
+        <p class="mb-0">
+          Ainda não há registros. Comece a semear a Palavra em sua vida!
+        </p>
+      </div>
+
+      <div th:each="app : ${applications}" class="card card-mentor result-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h5 class="card-title fw-bold">
+              Aplicação #<span th:text="${app.id}"></span>
+            </h5>
+            <div class="d-flex align-items-center">
+              <span
+                class="badge bg-secondary p-2 rounded-pill me-2"
+                th:text="${#temporals.format(app.createdAt, 'dd/MM HH:mm')}"
+              ></span>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteConfirmationModal"
+                th:data-app-id="${app.id}"
+                title="Excluir Permanentemente"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold text-muted mb-2">Seu Desafio:</h6>
+          <p
+            class="card-text border-start border-3 border-secondary-subtle ps-3 pb-2"
+            th:utext="${#strings.replace(app.userChallenge, '\n', '&lt;br/&gt;')}"
+          ></p>
+
+          <div class="mb-4">
+            <p class="section-title text-dark">
+              <i class="fa-solid fa-tag"></i> Temas Identificados (IA)
+            </p>
+            <span
+              class="badge badge-theme"
+              th:text="${app.identifiedTheme}"
+            ></span>
+          </div>
+
+          <div class="mb-4 p-4 versiculo-bussola">
+            <p class="section-title text-center mb-3">
+              1. O Versículo-Bússola (Seu Foco)
+            </p>
+            <p
+              class="card-text fs-5 text-center text-dark"
+              th:text="${app.versiculoBussola}"
+            ></p>
+          </div>
+
+          <div class="mb-4">
+            <p class="section-title">
+              <i class="fa-solid fa-lightbulb"></i> 2. A Reflexão Aplicada
+            </p>
+            <p
+              class="card-text"
+              th:utext="${#strings.replace(app.reflexaoAplicada, '\n', '&lt;br/&gt;')}"
+            ></p>
+          </div>
+
+          <div class="mb-4 conselhos-praticos">
+            <p class="section-title">
+              <i class="fa-solid fa-shoe-prints"></i> 3. Conselhos Práticos
+              (Ação)
+            </p>
+            <p
+              class="card-text"
+              th:utext="${#strings.replace(app.conselhosPraticos, '\n', '&lt;br/&gt;')}"
+            ></p>
+          </div>
+          <div class="mb-4">
+            <p class="section-title">
+              <i class="fa-solid fa-book-open"></i> 4. Referências Cruzadas
+              Contextuais
+            </p>
+            <p
+              class="card-text text-muted small"
+              th:utext="${#strings.replace(app.referenciasCruzadas, '\n', '&lt;br/&gt;')}"
+            ></p>
+            <div class="form-text">
+              Passagens para contextualizar e aprofundar sua leitura.
+            </div>
+          </div>
+
+          <div class="mb-0 p-3 rounded-3" style="background-color: #f3e5f5">
+            <p class="section-title mb-2">
+              <i class="fa-solid fa-hands-praying"></i> 5. Oração-Semente
+            </p>
+            <p
+              class="card-text fst-italic"
+              th:utext="${#strings.replace(app.oracaoSemente, '\n', '&lt;br/&gt;')}"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer text-center">
+      <div class="container">
+        <p class="mb-3 small">
+          ©
+          <span th:text="${#dates.year(#dates.createNow())}">2024</span> Semente
+          - Mentor de Aplicação da Fé.
+        </p>
+        <div class="mb-3">
+          <a href="#" class="footer-link mx-2 small">Sobre</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Contato</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Política de Privacidade</a>
+        </div>
+        <p class="small text-muted fst-italic">
+          Criado para inspirar reflexão e ação diária.
+        </p>
+      </div>
+    </footer>
+
+    <div
+      class="modal fade"
+      id="deleteConfirmationModal"
+      tabindex="-1"
+      aria-labelledby="deleteConfirmationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header modal-header-confirmation text-white">
+            <h5 class="modal-title" id="deleteConfirmationModalLabel">
+              <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+              Confirmação Necessária
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="mb-3">
+              Você tem certeza que deseja excluir este registro?
+            </p>
+            <p class="text-danger small">
+              Esta ação não pode ser desfeita e irá afetar seu Mapa de
+              Crescimento.
+            </p>
+
+            <form id="deleteForm" method="post" th:action="@{/delete/0}">
+              <input type="hidden" name="_method" value="delete" />
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger fw-bold">
+                  Sim, Excluir Definitivamente
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      // Lógica para injetar o ID do registro no Modal de Confirmação
+      document.addEventListener("DOMContentLoaded", function () {
+        const deleteConfirmationModal = document.getElementById(
+          "deleteConfirmationModal"
+        );
+        const deleteForm = document.getElementById("deleteForm");
+
+        // CORREÇÃO ESSENCIAL: Injeta o caminho base usando Thymeleaf para garantir o Context Path correto
+        const DELETE_BASE_PATH = /*[[@{/delete/}]]*/ "/delete/";
+
+        // Certifica-se de que o Modal de Confirmação lida com cliques de qualquer botão de lixeira
+        deleteConfirmationModal.addEventListener(
+          "show.bs.modal",
+          function (event) {
+            // Pega o botão que acionou o modal
+            const button = event.relatedTarget;
+
+            // Pega o ID do registro
+            const appId = button.getAttribute("data-app-id");
+
+            // ATUALIZA O ACTION USANDO O CAMINHO INJETADO PELO THYMELEAF
+            deleteForm.action = DELETE_BASE_PATH + appId;
+          }
+        );
+
+        // Lógica de Loading do Botão (Mantida)
+        const mentorshipForm = document.getElementById("mentorshipForm");
+        const generateButton = document.getElementById("generateButton");
+
+        mentorshipForm.addEventListener("submit", function () {
+          generateButton.disabled = true;
+          generateButton.innerHTML = `
+                <i class="fas fa-spinner fa-spin me-2"></i>
+                Processando... Aguarde um momento.
+            `;
+        });
+      });
+      /*]]>*/
+    </script>
+  </body>
+</html>

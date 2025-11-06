@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SementeGuia - Mentor de Aplicação da Fé</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      /* Paleta de Cores do Projeto (Consistência Visual) */
+      :root {
+        --cor-principal: #5e548e; /* Deep Lilac/Indigo (Cor Primária) */
+        --cor-acento: #ffc107; /* Gold/Amber (Cor de Destaque/CTA) */
+        --cor-fundo: #f7f9fc; /* Soft Blue/Gray (Fundo Calmo) */
+        --cor-secundaria: #e1bee7; /* Light Lilac (Destaque Suave) */
+        --cor-texto: #333333;
+        --cor-reflexao: #f0f8ff; /* Alice Blue */
+        --cor-high-contrast: #3a3255; /* Cor para texto principal de contraste */
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+
+      h1,
+      h2,
+      h3,
+      .section-title {
+        font-family: "Lora", serif;
+        color: var(--cor-principal);
+        font-weight: 700;
+      }
+
+      /* 1. HERO e Logotipo */
+      .header-hero {
+        background: linear-gradient(
+            135deg,
+            var(--cor-principal) 0%,
+            #8d79ad 100%
+          ),
+          var(--cor-principal);
+        color: white;
+        padding: 5rem 1rem 3rem;
+        border-radius: 0 0 3rem 3rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Melhoria de Legibilidade no Título e Shadow */
+      .header-hero h1,
+      .header-hero p {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      /* ****** ALTERAÇÃO AQUI (Melhoria da Logo) ****** */
+      .logo-placeholder {
+        font-size: 2.8rem; /* Ligeiramente maior para impacto */
+        font-weight: 700;
+        margin-bottom: 1.5rem; /* Mais espaço abaixo para separação */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem; /* Adiciona espaçamento controlado entre ícone e texto */
+        letter-spacing: -0.02em; /* Reduz ligeiramente o espaçamento entre letras */
+      }
+
+      .logo-placeholder i {
+        color: var(--cor-acento);
+        /* Removido margin-right: 0.75rem; */
+        font-size: 2.6rem; /* Ícone maior para combinar com a fonte */
+        /* Removido transform: rotate(-10deg); para alinhamento limpo */
+      }
+      /* ********************************************** */
+
+      /* Botão de Ação Principal (CTA) */
+      .btn-cta-principal {
+        background-color: var(--cor-acento);
+        border: none;
+        color: var(--cor-principal);
+        font-weight: 700;
+        padding: 1rem 2.5rem;
+        font-size: 1.25rem;
+        border-radius: 50px;
+        transition: all 0.3s ease-out;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.5);
+      }
+
+      .btn-cta-principal:hover {
+        background-color: #fdd835; /* Dourado mais intenso */
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.8);
+        color: var(--cor-principal);
+      }
+
+      /* 2. Seção de Benefícios (Cards) */
+      .feature-card {
+        border: none;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s;
+        height: 100%; /* Garante que os cards tenham altura igual */
+        background-color: white;
+        padding: 2rem !important; /* Padroniza o padding */
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-icon {
+        color: var(--cor-acento);
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Novo estilo para o destaque do SEMENTE e de termos */
+      .highlight-word {
+        color: var(--cor-acento); /* Dourado */
+        font-weight: 800; /* Mais grosso */
+        margin: 0 0.25rem;
+      }
+
+      /* Termos de destaque no corpo do texto (ex: Versículo-Bússola) */
+      .highlight-term {
+        color: var(--cor-principal); /* Lilás */
+        font-weight: 600;
+      }
+
+      /* 3. Placeholder de Vídeo (Estilo TikTok) */
+      .video-placeholder-container {
+        /* MUDANÇA 1: Reduz a largura máxima para se adequar a um vídeo vertical */
+        max-width: 400px;
+        margin: 4rem auto;
+        box-shadow: 0 8px 30px rgba(94, 84, 142, 0.3);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        border: 4px solid var(--cor-principal);
+      }
+
+      .video-box {
+        position: relative;
+        width: 100%;
+        /* MUDANÇA 2: Altera o padding-top para 9:16 (16/9 * 100% = 177.78%) */
+        padding-top: 177.78%; /* 9:16 Aspect Ratio */
+        background-color: var(--cor-principal);
+        text-align: center;
+        color: white;
+        font-family: "Lora", serif;
+      }
+
+      .video-box-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .video-box-content i {
+        font-size: 4rem;
+        color: var(--cor-acento);
+        margin-bottom: 1rem;
+      }
+
+      /* 4. Planos de Preço */
+      .pricing-card {
+        border: 2px solid var(--cor-secundaria);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        transition: all 0.3s;
+        height: 100%;
+        background-color: white;
+      }
+
+      .pricing-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+      }
+
+      /* Destaque para o Plano Popular */
+      .pricing-popular {
+        border-color: var(--cor-acento);
+        background-color: var(--cor-reflexao);
+        box-shadow: 0 10px 35px rgba(255, 193, 7, 0.3);
+      }
+
+      .pricing-popular .btn-pricing {
+        background-color: var(--cor-principal);
+        color: white;
+      }
+
+      .pricing-popular .btn-pricing:hover {
+        background-color: #4a4072;
+      }
+
+      .price-value {
+        font-family: "Lora", serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: var(--cor-principal);
+      }
+
+      .btn-pricing {
+        background-color: var(--cor-acento);
+        color: var(--cor-principal);
+        font-weight: 600;
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s;
+        border: none;
+      }
+
+      .btn-pricing:hover {
+        background-color: #fdd835;
+        color: var(--cor-principal);
+        transform: scale(1.05);
+      }
+
+      /* Ícones de Check na Lista de Recursos */
+      .list-check i {
+        color: var(--cor-principal);
+        margin-right: 0.5rem;
+      }
+
+      /* 5. Footer */
+      .app-footer {
+        border-top: 1px solid #e0e0e0;
+        background-color: white;
+        color: #777;
+        padding: 2rem 0 1rem;
+      }
+
+      .footer-link {
+        color: var(--cor-principal);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+
+      .footer-link:hover {
+        color: var(--cor-acento);
+      }
+
+      /* ========================================= */
+      /* MOBILE RESPONSIVENESS (UX/Performance) */
+      /* ========================================= */
+      @media (max-width: 768px) {
+        .header-hero {
+          /* Reduz o padding superior e inferior do Hero */
+          padding: 3rem 1rem 2rem;
+          border-radius: 0 0 1.5rem 1.5rem; /* Bordas mais suaves no mobile */
+        }
+
+        .header-hero h1 {
+          /* Ajusta o tamanho da manchete principal */
+          font-size: 2rem;
+        }
+
+        .header-hero p {
+          /* Ajusta a descrição */
+          font-size: 1rem;
+        }
+
+        .logo-placeholder {
+          font-size: 2rem;
+        }
+
+        .logo-placeholder i {
+          font-size: 1.8rem;
+        }
+
+        .btn-cta-principal {
+          /* Torna o botão CTA principal full-width e ligeiramente menor */
+          width: 100%;
+          padding: 0.8rem 1.5rem;
+          font-size: 1.05rem;
+        }
+
+        /* Reduz o padding vertical das seções principais na tag <main> */
+        /* Otimização: Forçar o padding do container para mobile */
+        .container.py-5 {
+          padding-top: 2rem !important;
+          padding-bottom: 2rem !important;
+        }
+
+        /* Reduz o espaçamento entre seções */
+        section.mb-5 {
+          margin-bottom: 3rem !important;
+        }
+
+        /* Ajusta o espaçamento dos títulos */
+        .section-title {
+          margin-bottom: 1rem !important;
+          font-size: 1.5rem;
+        }
+
+        /* Otimiza a exibição dos cards de benefício e preço */
+        .feature-card {
+          margin-bottom: 1rem;
+          padding: 1.5rem !important;
+        }
+
+        .pricing-card {
+          margin-bottom: 1.5rem;
+          padding: 1.5rem;
+        }
+
+        .price-value {
+          font-size: 3rem; /* Levemente menor */
+        }
+
+        .video-placeholder-container {
+          margin: 2rem auto;
+          border-width: 2px;
+          /* Garante que o vídeo não ultrapasse a tela no mobile */
+          max-width: 320px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header-hero text-center">
+      <div class="container">
+        <div class="logo-placeholder">
+          <i class="fa-solid fa-seedling"></i> SEMENTEGUIA
+        </div>
+        <h1 class="display-5 fw-bold mb-4 text-white">
+          Transforme Seus Desafios Diários em Crescimento Espiritual.
+        </h1>
+        <p class="lead text-white mb-5 opacity-75">
+          Receba uma mentoria bíblica personalizada por IA, focada na aplicação
+          imediata da Palavra na sua rotina, para Ansiedade, Paciência e
+          Direção.
+        </p>
+        <div class="d-grid">
+          <a th:href="@{/login}" class="btn btn-cta-principal">
+            <i class="fas fa-arrow-right me-2"></i> Comece a Semear Seu
+            Crescimento Agora
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container py-5">
+      <section class="mb-5 text-center">
+        <h2 class="h3 section-title mb-5">
+          O <strong class="highlight-word">SementeGuia</strong> é Seu Mentor de
+          Aplicação 24 Horas
+        </h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <i class="feature-icon fa-solid fa-compass"></i>
+              <h3 class="h5 fw-bold mb-3">Direção Imediata (IA)</h3>
+              <p class="card-text text-muted">
+                Insira qualquer desafio (ansiedade, conflito, dúvida) e receba
+                em segundos um
+                <strong class="highlight-term">Versículo-Bússola</strong> e uma
+                <strong class="highlight-term">Reflexão Aplicada</strong>
+                diretamente para sua necessidade.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <i class="feature-icon fa-solid fa-calendar-check"></i>
+              <h3 class="h5 fw-bold mb-3">Hábito e Consistência</h3>
+              <p class="card-text text-muted">
+                Acompanhe seu progresso com o
+                <strong class="highlight-term">Mapa de Crescimento</strong>
+                (Dashboard). Veja a frequência de suas aplicações e quais temas
+                (Paciência, Foco, Perdão) estão dominando sua jornada.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card feature-card">
+              <i class="feature-icon fa-solid fa-hands-praying"></i>
+              <h3 class="h5 fw-bold mb-3">Foco na Ação</h3>
+              <p class="card-text text-muted">
+                Sua mentoria inclui Referências Cruzadas para estudo aprofundado
+                e uma poderosa
+                <strong class="highlight-term">Oração-Semente</strong> para
+                selar sua aplicação e manter o foco no dia.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="text-center mb-5">
+        <h2 class="h4 section-title mb-4">
+          Veja a Semente do Crescimento em 60 Segundos
+        </h2>
+        <p class="text-muted mb-4">
+          Entenda como a Palavra se torna o Guia no seu desafio de hoje.
+        </p>
+
+        <div class="video-placeholder-container">
+          <div class="video-box">
+            <div class="video-box-content">
+              <i class="fa-brands fa-tiktok"></i>
+              <h3 class="h4 mb-2">Demonstração Rápida</h3>
+              <p class="small opacity-75">
+                Seu vídeo aqui (9:16 - Formato TikTok)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-5">
+        <h2 class="h3 section-title text-center mb-5">
+          Escolha o Plano Ideal para Sua Jornada
+        </h2>
+        <div class="row g-4 justify-content-center">
+          <div class="col-lg-4 col-md-6">
+            <div class="pricing-card text-center">
+              <h4 class="h5 fw-bold text-muted mb-2">Semente</h4>
+              <div class="price-value mb-4">
+                R$ 19<span class="fs-4 fw-normal">,90/mês</span>
+              </div>
+              <p class="fw-semibold text-muted mb-4">
+                Ideal para Testar o Hábito
+              </p>
+
+              <div class="list-check text-start mb-5">
+                <p class="mb-2">
+                  <i class="fas fa-check"></i>
+                  <strong>10 Mentorias/Mês</strong> (Prompts)
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Versículo-Bússola e Reflexão
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Acesso ao Diário de Aplicações
+                </p>
+                <p class="mb-2 text-muted">
+                  <i class="fas fa-times text-danger"></i> Referências Cruzadas
+                  Ilimitadas
+                </p>
+                <p class="mb-2 text-muted">
+                  <i class="fas fa-times text-danger"></i> Mapa de Crescimento
+                  (Dashboard)
+                </p>
+              </div>
+
+              <a
+                th:href="@{/checkout(plan='SEMENTE')}"
+                class="btn btn-pricing d-block"
+              >
+                Assinar Plano Semente
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="pricing-card pricing-popular text-center">
+              <div
+                class="badge bg-warning text-dark mb-3 p-2 fw-bold rounded-pill"
+              >
+                MAIS POPULAR
+              </div>
+              <h4 class="h5 fw-bold mb-2" style="color: var(--cor-principal)">
+                Colheita
+              </h4>
+              <div class="price-value mb-4">
+                R$ 49<span class="fs-4 fw-normal">,90/mês</span>
+              </div>
+              <p class="fw-semibold text-muted mb-4">
+                O Caminho para o Hábito Diário
+              </p>
+
+              <div class="list-check text-start mb-5">
+                <p class="mb-2">
+                  <i class="fas fa-check"></i>
+                  <strong>30 Mentorias/Mês</strong> (1 por dia)
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Versículo-Bússola e Reflexão
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Acesso Total ao Diário de
+                  Aplicações
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Referências Cruzadas Ilimitadas
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i>
+                  <strong>Mapa de Crescimento Completo</strong> (Dashboard)
+                </p>
+              </div>
+
+              <a
+                th:href="@{/checkout(plan='COLHEITA')}"
+                class="btn btn-pricing d-block"
+              >
+                Assinar Plano Colheita
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="pricing-card text-center">
+              <h4 class="h5 fw-bold text-muted mb-2">Jardineiro</h4>
+              <div class="price-value mb-4">
+                R$ 99<span class="fs-4 fw-normal">,90/mês</span>
+              </div>
+              <p class="fw-semibold text-muted mb-4">
+                Para Crescimento Acelerado e Famílias
+              </p>
+
+              <div class="list-check text-start mb-5">
+                <p class="mb-2">
+                  <i class="fas fa-check"></i>
+                  <strong>Mentorias Ilimitadas</strong>
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Todos os recursos do plano
+                  Colheita
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Referências Cruzadas Ilimitadas
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i> Mapa de Crescimento Completo
+                </p>
+                <p class="mb-2">
+                  <i class="fas fa-check"></i>
+                  <strong>Prioridade no Suporte</strong> (Novo)
+                </p>
+              </div>
+
+              <a
+                th:href="@{/checkout(plan='JARDINEIRO')}"
+                class="btn btn-pricing d-block"
+              >
+                Assinar Plano Jardineiro
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer text-center">
+      <div class="container">
+        <p class="mb-3 small">
+          ©
+          <span th:text="${#dates.year(#dates.createNow())}">2025</span> SementeGuia
+          - Mentor de Aplicação da Fé.
+        </p>
+        <div class="mb-3">
+          <a href="#" class="footer-link mx-2 small">Termos de Uso</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Política de Privacidade</a>
+          |
+          <a href="#" class="footer-link mx-2 small">Fale Conosco</a>
+        </div>
+        <p class="small text-muted fst-italic">
+          A Palavra de Deus aplicada à sua vida. Simples, objetivo e acionável.
+        </p>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
