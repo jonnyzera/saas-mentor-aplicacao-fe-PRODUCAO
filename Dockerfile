@@ -1,28 +1,23 @@
 # 1. Fase de Build (Compilação do JAR)
-# Usa a imagem oficial do Maven com Java 17
 FROM maven:3.9.5-eclipse-temurin-17 AS build
 
 # Define o diretório de trabalho
 WORKDIR /app
 
-# COPIAR TUDO: Copia todo o conteúdo do Root Directory (mentor_de_aplicacao_da_fe)
-# para o diretório de trabalho do container. Isso resolve o erro de "src not found".
+# COPIA TUDO: Isso resolve a falha de 'pom.xml not found'
 COPY . .
 
-# Executa o build do Maven, pulando os testes para ser mais rápido.
+# Executa o build do Maven, pulando os testes
 RUN mvn package -DskipTests
 
 # 2. Fase de Execução (Runtime)
-# Usa uma imagem mais leve (apenas JRE 17) para execução
 FROM eclipse-temurin:17-jre-alpine
 
-# Define o nome do arquivo JAR gerado
-# O nome do JAR é baseado no pom.xml
+# Nome do JAR gerado pelo Maven
 ARG JAR_FILE=target/mentor_de_aplicacao_da_fe-0.0.1-SNAPSHOT.jar
 
-# Copia o JAR da fase de build para a fase de execução
+# Copia o JAR da fase de build
 COPY --from=build /app/${JAR_FILE} app.jar
 
-# Define o ponto de entrada e o comando de execução
-# O Spring Boot automaticamente lerá a variável de ambiente PORT que o Railway define.
+# Comando de execução
 ENTRYPOINT ["java", "-jar", "app.jar"]
