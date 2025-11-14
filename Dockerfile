@@ -1,23 +1,29 @@
 # 1. Fase de Build (Compilação do JAR)
+# Use uma imagem Maven com Java 17
 FROM maven:3.9.5-eclipse-temurin-17 AS build
 
-# Define o diretório de trabalho
+# Define o diretório de trabalho raiz do repositório
 WORKDIR /app
 
-# COPIA TUDO: Isso resolve a falha de 'pom.xml not found'
+# COPIA TUDO do diretório raiz para o WORKDIR /app
 COPY . .
 
-# Executa o build do Maven, pulando os testes
-RUN mvn package -DskipTests
+# CRÍTICO: Mudar o WORKDIR para o subdiretório onde está o pom.xml
+WORKDIR /app/mentor_de_aplicacao_da_fe
+
+# Executa o build do Maven. Assume o 'app.jar' se o pom.xml foi ajustado.
+RUN mvn clean package -DskipTests
 
 # 2. Fase de Execução (Runtime)
+# Imagem base leve com apenas o JRE para execução
 FROM eclipse-temurin:17-jre-alpine
 
-# Nome do JAR gerado pelo Maven
-ARG JAR_FILE=target/mentor_de_aplicacao_da_fe-0.0.1-SNAPSHOT.jar
+# Expõe a porta que o Spring Boot usará.
+EXPOSE 8080
 
-# Copia o JAR da fase de build
-COPY --from=build /app/${JAR_FILE} app.jar
+# Copia o JAR do diretório 'target' da fase de build, renomeando para 'app.jar'
+# O caminho está correto para buscar no subdiretório do build.
+COPY --from=build /app/mentor_de_aplicacao_da_fe/target/app.jar app.jar
 
-# Comando de execução
+# Comando de execução: Inicia a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
