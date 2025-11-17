@@ -26,4 +26,4 @@ EXPOSE 8080
 COPY --from=build /app/mentor_de_aplicacao_da_fe/target/app.jar app.jar
 
 # Comando de execução: Inicia a aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
