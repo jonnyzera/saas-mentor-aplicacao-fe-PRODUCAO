@@ -265,6 +265,14 @@
       /* ========================================= */
       @media (max-width: 768px) {
         .header-hero {
+          /* FIX: Forçar reaplicação do fundo no mobile para evitar erros de renderização/cache */
+          background: linear-gradient(
+              135deg,
+              var(--cor-principal) 0%,
+              #8d79ad 100%
+            ),
+            var(--cor-principal);
+          color: white;
           /* Reduz o padding superior e inferior do Hero */
           padding: 3rem 1rem 2rem;
           border-radius: 0 0 1.5rem 1.5rem; /* Bordas mais suaves no mobile */
