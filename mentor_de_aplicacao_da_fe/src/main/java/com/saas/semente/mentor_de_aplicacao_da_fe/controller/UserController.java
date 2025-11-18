@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     /**
-     * Rota GET para exibir a página de login.
+     * Rota GET para exibir a página de login...
      */
     @GetMapping("/login")
     public String login() {
