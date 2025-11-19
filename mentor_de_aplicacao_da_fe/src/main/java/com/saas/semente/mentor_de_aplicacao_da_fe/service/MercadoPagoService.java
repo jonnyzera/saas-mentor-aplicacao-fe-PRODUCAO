@@ -30,7 +30,7 @@ public class MercadoPagoService {
     private String appBaseUrl;
     
     // Preço de R$ 1,00 para teste
-    private static final BigDecimal SEMENTE_PRICE = new BigDecimal("1.00");
+    private static final BigDecimal SEMENTE_PRICE = new BigDecimal("19.90"); // Corrigido para preço real
     private static final BigDecimal COLHEITA_PRICE = new BigDecimal("49.90");
     private static final BigDecimal JARDINEIRO_PRICE = new BigDecimal("99.90");
 
@@ -47,6 +47,7 @@ public class MercadoPagoService {
         String planDescription;
         BigDecimal planPrice;
         
+        // Uso dos preços reais (Corrigido o SEMENTE_PRICE que estava com 1.00 para teste)
         switch (plan) {
             case SEMENTE:
                 planDescription = "Plano Semente - 10 Mentorias/Mês";
@@ -92,7 +93,7 @@ public class MercadoPagoService {
         PreferenceRequest request = PreferenceRequest.builder()
             .items(Collections.singletonList(item))
             .externalReference(externalId) 
-            .purpose("wallet_purchase") 
+            //.purpose("wallet_purchase") // REMOVIDO PARA HABILITAR PIX E BOLETO
             .backUrls(PreferenceBackUrlsRequest.builder()
                 .success(appBaseUrl + "/checkout/processing") 
                 .pending(appBaseUrl + "/checkout/processing")
