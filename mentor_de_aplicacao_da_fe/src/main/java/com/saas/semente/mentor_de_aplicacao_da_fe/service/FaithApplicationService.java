@@ -101,7 +101,7 @@ public class FaithApplicationService {
         // --- 4. EXECUÇÃO DA CHAMADA COM WEBCLIENT (Substituição do RestTemplate) ---
         Map<String, Object> responseBody = webClient.post()
             .uri(uriBuilder -> uriBuilder
-                .path("/models/gemini-2.5-flash-preview-05-20:generateContent")
+                .path("/models/gemini-2.5-flash:generateContent")
                 .queryParam("key", geminiApiKey)
                 .build())
             .contentType(MediaType.APPLICATION_JSON)
