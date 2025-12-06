@@ -55,7 +55,7 @@ Crie um banco de dados no PostgreSQL (ex: `mentor_db`) e um usuário (ex: `mento
 
 ```properties
 # Configuração do PostgreSQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/mentor_db
-spring.datasource.username=mentor_user
-spring.datasource.password=123456
-spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
